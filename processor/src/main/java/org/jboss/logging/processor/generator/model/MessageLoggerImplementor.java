@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 
 import org.jboss.jdeparser.JAssignableExpr;
 import org.jboss.jdeparser.JBlock;
@@ -85,8 +86,8 @@ final class MessageLoggerImplementor extends ImplementationClassModel {
      * @param processingEnv    the processing environment
      * @param messageInterface the message interface to implement
      */
-    public MessageLoggerImplementor(final ProcessingEnvironment processingEnv, final MessageInterface messageInterface) {
-        super(processingEnv, messageInterface);
+    public MessageLoggerImplementor(final ProcessingEnvironment processingEnv, final RoundEnvironment roundEnv, final MessageInterface messageInterface) {
+        super(processingEnv, roundEnv, messageInterface);
     }
 
     @Override

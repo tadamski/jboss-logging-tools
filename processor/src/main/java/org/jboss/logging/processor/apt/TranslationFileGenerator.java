@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedOptions;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -136,7 +137,7 @@ final class TranslationFileGenerator extends AbstractGenerator {
     }
 
     @Override
-    public void processTypeElement(final TypeElement annotation, final TypeElement element, final MessageInterface messageInterface) {
+    public void processTypeElement(final TypeElement annotation, final TypeElement element, final MessageInterface messageInterface, RoundEnvironment roundEnv) {
         if (generatedFilesPath != null) {
             if (element.getKind().isInterface()) {
                 String packageName = processingEnv.getElementUtils().getPackageOf(element).getQualifiedName().toString();

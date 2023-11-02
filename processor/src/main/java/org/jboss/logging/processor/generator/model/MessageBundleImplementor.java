@@ -25,6 +25,7 @@ package org.jboss.logging.processor.generator.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 
 import org.jboss.jdeparser.JCall;
 import org.jboss.jdeparser.JClassDef;
@@ -52,8 +53,8 @@ class MessageBundleImplementor extends ImplementationClassModel {
      * @param processingEnv    the processing environment
      * @param messageInterface the message interface to implement.
      */
-    public MessageBundleImplementor(final ProcessingEnvironment processingEnv, final MessageInterface messageInterface) {
-        super(processingEnv, messageInterface);
+    public MessageBundleImplementor(final ProcessingEnvironment processingEnv, RoundEnvironment roundEnv, final MessageInterface messageInterface) {
+        super(processingEnv, roundEnv, messageInterface);
     }
 
     @Override

@@ -41,6 +41,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedOptions;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
@@ -106,7 +107,7 @@ final class TranslationClassGenerator extends AbstractGenerator {
     }
 
     @Override
-    public void processTypeElement(final TypeElement annotation, final TypeElement element, final MessageInterface messageInterface) {
+    public void processTypeElement(final TypeElement annotation, final TypeElement element, final MessageInterface messageInterface, final RoundEnvironment roundEnv) {
         if (skipTranslations) {
             logger().debug(element, "Skipping processing of translation implementation");
             return;
@@ -116,7 +117,7 @@ final class TranslationClassGenerator extends AbstractGenerator {
             final Map<File, Map<MessageMethod, String>> validTranslations = allInterfaceTranslations(messageInterface, files);
             if (files != null) {
                 for (File file : files) {
-                    generateSourceFileFor(messageInterface, file, validTranslations.get(file));
+                    generateSourceFileFor(messageInterface, file, validTranslations.get(file), roundEnv);
                 }
             }
         } catch (IOException e) {
@@ -236,18 +237,18 @@ final class TranslationClassGenerator extends AbstractGenerator {
      * @param translationFile  the translation file
      * @param translations     the translations message
      */
-    private void generateSourceFileFor(final MessageInterface messageInterface, final File translationFile, final Map<MessageMethod, String> translations) {
+    private void generateSourceFileFor(final MessageInterface messageInterface, final File translationFile, final Map<MessageMethod, String> translations, final RoundEnvironment roundEnv) {
 
         //Generate empty translation super class if needed
         //Check if enclosing translation file exists, if not generate an empty super class
         final String enclosingTranslationFileName = getEnclosingTranslationFileName(translationFile);
         final File enclosingTranslationFile = new File(translationFile.getParent(), enclosingTranslationFileName);
         if (!enclosingTranslationFileName.equals(translationFile.getName()) && !enclosingTranslationFile.exists()) {
-            generateSourceFileFor(messageInterface, enclosingTranslationFile, Collections.<MessageMethod, String>emptyMap());
+            generateSourceFileFor(messageInterface, enclosingTranslationFile, Collections.<MessageMethod, String>emptyMap(), roundEnv);
         }
 
         //Create source file
-        final ClassModel classModel = ClassModelFactory.translation(processingEnv, messageInterface, getTranslationClassNameSuffix(translationFile.getName()), translations);
+        final ClassModel classModel = ClassModelFactory.translation(processingEnv, roundEnv, messageInterface, getTranslationClassNameSuffix(translationFile.getName()), translations);
 
         try {
             classModel.generateAndWrite();

@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.ExecutableElement;
@@ -105,8 +106,8 @@ abstract class ImplementationClassModel extends ClassModel {
      * @param processingEnv    the processing environment
      * @param messageInterface the message interface to implement.
      */
-    ImplementationClassModel(final ProcessingEnvironment processingEnv, final MessageInterface messageInterface) {
-        super(processingEnv, messageInterface, implementationClassName(messageInterface), null);
+    ImplementationClassModel(final ProcessingEnvironment processingEnv, RoundEnvironment roundEnv, final MessageInterface messageInterface) {
+        super(processingEnv, roundEnv, messageInterface, implementationClassName(messageInterface), null);
         stringType = ElementHelper.toType(processingEnv, String.class);
     }
 
